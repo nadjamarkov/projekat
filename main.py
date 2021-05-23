@@ -1,41 +1,83 @@
-import pygame as pg
+import pygame 
 import pygamebg
-import time
+import tkinter
+from tkinter import messagebox
 
-(sirina, visina) = (500, 600)
-prozor = pygamebg.open_window(sirina, visina, "test")
-pg.key.set_repeat(50,25)
+pygame.init()
 
-#definisanje loptice
-r = 20
-y = 500
-y0 = 500
-a = 3
-dt = 0
-i = 0
-trenje = 0.8
-
-def crtanje():
-    prozor.fill(pg.Color("white"))
-    pg.draw.circle(prozor, pg.Color("red"), (250,y), r)
-
-def obradi_dogadjaj(dogadjaj):
-    global x, y, dt
-    if dogadjaj.type == pg.KEYDOWN:  
-        if dogadjaj.key == pg.K_UP:
-            y = y - a*dt 
-            dt = dt + 0.05         
-            return True  
-    elif dogadjaj.type == pg.KEYUP:
-        if dogadjaj.key == pg.K_UP:
-            '''
-            i = 0
-            while i<3:
-                y = y - (a*dt - trenje) 
-                prozor.fill(pg.Color("white"))
-                pg.draw.circle(prozor, pg.Color("red"), (250,y), r) 
-                i = i + 1  
-                time.sleep(1)
-            '''
-
-pygamebg.event_loop(crtanje, obradi_dogadjaj)
+(sirina, visina) = (1000,600)
+prozor = pygamebg.open_window(sirina, visina, "Test")
+prozor.fill(pygame.Color("white"))
+pygame.draw.rect(prozor, pygame.Color("black"), (0,100,1000,100))
+pygame.draw.rect(prozor, pygame.Color("yellow"), (650,0,10,1000))
+pygame.draw.rect(prozor, pygame.Color("black"), (0,350,1000,100))
+x = 50
+y= 150
+x1 = 50
+y1 = 400
+velocity = 1
+velocity1 = 1
+def update():
+    global x,y,velocity,x1,y1,velocity1
+    pressed = pygame.key.get_pressed()
+    prozor.fill(pygame.Color("white"))
+    pygame.draw.rect(prozor, pygame.Color("black"), (0,100,1000,100))
+    pygame.draw.rect(prozor, pygame.Color("black"), (0,350,1000,100))
+    pygame.draw.rect(prozor, pygame.Color("yellow"), (650,0,10,1000))
+    if y>100 and y<200:
+        velocity = 4
+    else:
+        velocity = 1
+    if pressed[pygame.K_RIGHT]:
+        x+=velocity
+    if pressed[pygame.K_LEFT]:
+        x-=velocity
+    if pressed[pygame.K_DOWN]:
+        y+=velocity
+    if pressed[pygame.K_UP]:
+        y-=velocity
+    if x>690:
+        root = tkinter.Tk()
+        root.withdraw()
+        messagebox.showinfo("Pobeda!", "Prvi igrač je pobedio")
+        raise Exception()
+    pygame.draw.circle(prozor, pygame.Color("red"), (x,y), 30)
+    if y1>350 and y1<450:
+        velocity1 = 4
+    else:
+        velocity1 = 1
+    if pressed[pygame.K_d]:
+        x1+=velocity1
+    if pressed[pygame.K_a]:
+        x1-=velocity1
+    if pressed[pygame.K_s]:
+        y1+=velocity1
+    if pressed[pygame.K_w]:
+        y1-=velocity1
+    if x1>690:
+        root = tkinter.Tk()
+        root.withdraw()
+        messagebox.showinfo("Pobeda!", "Drugi igrač je pobedio")
+        raise Exception()
+    pygame.draw.circle(prozor, pygame.Color("magenta"), (x1,y1), 30)
+pygamebg.frame_loop(30, update)
+'''
+while running:
+    ev = pygame.event.get()
+    for event in ev:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+        elif event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                x0+=1
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                x0-=1
+        
+    prozor.fill(pygame.Color("white"))
+    pygame.draw.circle(prozor, pygame.Color("red"), (x0,y0), 10)
+    pygame.display.update()
+    '''
